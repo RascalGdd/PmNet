@@ -6,5 +6,5 @@ The official repository for AAAI 2025 paper: Surgical Workflow Recognition and B
 
 - Pmnet and PmLR50 Dataset
   - [ ] PmLR50 Dataset
-  - [ ] Pmnet (surgical workflow recognition)
-  - [ ] Pmnet
+  - [ ] Pmnet (general surgical workflow recognition)
+  - [ ] Pmnet (surgical workflow recognition and blocking effectiveness detection)

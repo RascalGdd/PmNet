@@ -1,10 +1,14 @@
 # PmNet
-The official repository for AAAI 2025 paper: Surgical Workflow Recognition and Blocking Effectiveness Detection in Laparoscopic Liver Resections with Pringle Maneuver
+The official repository for Surgical Workflow Recognition and Blocking Effectiveness Detection in Laparoscopic Liver Resections with Pringle Maneuver
 
+## 🔥🔥🔥 News!!
+* Dec 12, 2024: 🤗 Our work has been accepted by AAAI 2025! Congratulations!
+* Dec 17, 2024: 🚀 We release the Dataset and code of Pmnet for general Surgical Workflow Recognition.
 
 ## 📑 Open-source Plan
 
-- Pmnet and PmLR50 Dataset
-  - [ ] PmLR50 Dataset
-  - [ ] Pmnet (general surgical workflow recognition)
-  - [ ] Pmnet (surgical workflow recognition and blocking effectiveness detection)
+- General Surgical Workflow Recognition
+  - [x] PmLR50 Dataset
+  - [x] Pmnet
+ 
+

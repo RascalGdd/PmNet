@@ -1,4 +1,4 @@
-# PmNet
+# Surgical Workflow Recognition and Blocking Effectiveness Detection in Laparoscopic Liver Resections with Pringle Maneuver
 The official repository for Surgical Workflow Recognition and Blocking Effectiveness Detection in Laparoscopic Liver Resections with Pringle Maneuver
 
 ## 🔥🔥🔥 News!!

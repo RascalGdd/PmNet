@@ -8,7 +8,7 @@ Official repository for Surgical Workflow Recognition and Blocking Effectiveness
 ## 📑 Open-source Plan
 
 - General Surgical Workflow Recognition
-  - [x] PmLR50 Dataset
+  - [ ] PmLR50 Dataset
   - [ ] Pmnet
 
 - Surgical Workflow Recognition and Blocking Effectiveness Detection
@@ -16,5 +16,3 @@ Official repository for Surgical Workflow Recognition and Blocking Effectiveness
   - [ ] Pmnet
 
 ## General Surgical Workflow Recognition
-
-- 📖 PmLR50 Dataset: [OneDrive](https://mycuhk-my.sharepoint.com/:u:/g/personal/1155229775_link_cuhk_edu_hk/EVFbzd1DonJOkBQZnoFVcdsBVQTCl1OYOlAZq0ixmCPOEQ?e=tCcWam).

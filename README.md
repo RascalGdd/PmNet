@@ -11,7 +11,7 @@ Official repository for Surgical Workflow Recognition and Blocking Effectiveness
   - [ ] PmLR50 Dataset
   - [x] Pmnet
 
-- Surgical Workflow Recognition and Blocking Effectiveness Detection
+- Blocking Effectiveness Detection
   - [ ] PmLR50 Dataset (Bounding boxes)
 
 ## General Surgical Workflow Recognition

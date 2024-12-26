@@ -66,6 +66,21 @@ sh scripts/train_phase.sh
 ```shell
 sh scripts/test.sh
 ```
+### More Configurations
+
+We list some more useful configurations for easy usage:
+
+|        Argument        |  Default  |                Description                |
+|:----------------------:|:---------:|:-----------------------------------------:|
+|       `--batch_size`       |   8    |   The batch size for training and inference   |
+|     `--epochs`     | 50  |      The max epoch for training      |
+|    `--save_ckpt_freq`    |    10    |     The frequency for saving checkpoints during training     |
+|    `--nb_classes`     |    5     |     The number of classes for surgical workflows      |
+| `--data_strategy` |    online    |    Online/offline mode       |
+|     `--num_frames`     |    20    | The number of consecutive frames used  |
+|     `--sampling_rate`   |    8  | The sampling interval for comsecutive frames |
+|        `--enable_deepspeed`        |    True  |   Use deepspeed to accelerate  |
+|  `--dist_eval`   |   True   |    Use distributed evaluation to accelerate    |
 
 ## Acknowledgements
 Huge thanks to the authors of following open-source projects:

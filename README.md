@@ -82,6 +82,10 @@ We list some more useful configurations for easy usage:
 |        `--enable_deepspeed`        |    True  |   Use deepspeed to accelerate  |
 |  `--dist_eval`   |   True   |    Use distributed evaluation to accelerate    |
 
+### Checkpoint
+
+The checkpoint of our model is provided [here](https://mycuhk-my.sharepoint.com/:u:/g/personal/1155229775_link_cuhk_edu_hk/EaymSNkgnLJJry1PqwINcVUBQzBYPt53fE9c574Z08TWSg?e=4IWBKO)
+
 ## Acknowledgements
 Huge thanks to the authors of following open-source projects:
 - [TMRNet](https://github.com/YuemingJin/TMRNet)

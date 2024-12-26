@@ -20,7 +20,6 @@ Official repository for Surgical Workflow Recognition and Blocking Effectiveness
 Download raw video data from [PmLR50](link);
 The final structure of datasets should be as following:
 
-Note that you can change `fps` in the Step.2 to generate more frames.
 ```bash
 data/
     └──PmLR50/

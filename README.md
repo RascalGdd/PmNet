@@ -54,7 +54,7 @@ We provide the script for training [train_phase.sh](https://github.com/RascalGdd
 run the following code for training
 
 ```shell
-sh scripts/train.sh
+sh scripts/train_phase.sh
 ```
 > You need to modify **data_path**, **eval_data_path**, **output_dir** and **log_dir** according to your own setting.
 

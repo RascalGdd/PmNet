@@ -17,7 +17,7 @@ Official repository for Surgical Workflow Recognition and Blocking Effectiveness
 ## General Surgical Workflow Recognition
 
 ### Prepare your data
-Download raw video data from [PmLR50](link);
+Download processed data from [PmLR50];
 The final structure of datasets should be as following:
 
 ```bash

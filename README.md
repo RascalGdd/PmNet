@@ -3,7 +3,7 @@ Official repository for Surgical Workflow Recognition and Blocking Effectiveness
 
 ## 🔥🔥🔥 News!!
 * Dec 12, 2024: 🤗 Our work has been accepted by AAAI 2025! Congratulations!
-* Dec 26, 2024: 🤗 Code has been released!
+* Dec 26, 2024: 🚀 Code for General Surgical Workflow Recognition has been released!
 
 ## 📑 Open-source Plan
 

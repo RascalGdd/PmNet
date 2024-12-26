@@ -3,6 +3,7 @@ Official repository for Surgical Workflow Recognition and Blocking Effectiveness
 
 ## 🔥🔥🔥 News!!
 * Dec 12, 2024: 🤗 Our work has been accepted by AAAI 2025! Congratulations!
+* Dec 26, 2024: 🤗 Code has been released!
 
 ## 📑 Open-source Plan
 
@@ -59,3 +60,6 @@ Huge thanks to the authors of following open-source projects:
 - [TMRNet](https://github.com/YuemingJin/TMRNet)
 - [Surgformer](https://github.com/isyangshu/Surgformer/)
 - [TimeSformer](https://github.com/facebookresearch/TimeSformer)
+
+## License & Citation 
+If you find our work useful in your research, please consider citing our paper.

@@ -15,7 +15,13 @@ Official repository for Surgical Workflow Recognition and Blocking Effectiveness
   - [ ] PmLR50 Dataset (Bounding boxes)
 
 ## General Surgical Workflow Recognition
-
+### Installation
+* Environment: CUDA 11.4 / Python 3.8
+* Device: NVIDIA GeForce RTX 4090
+* Create a virtual environment
+```shell
+> conda env create -f PmNet.yml
+```
 ### Prepare your data
 Download processed data from [PmLR50];
 The final structure of datasets should be as following:

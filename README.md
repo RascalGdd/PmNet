@@ -24,7 +24,7 @@
 ## General Surgical Workflow Recognition
 ### Installation
 * Environment: CUDA 11.4 / Python 3.8
-* Device: NVIDIA GeForce RTX 4090
+* Device: Two NVIDIA GeForce RTX 4090s
 * Create a virtual environment
 ```shell
 > conda env create -f PmNet.yml

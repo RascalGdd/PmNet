@@ -15,11 +15,11 @@
 ## 📑 Open-source Plan
 
 - General Surgical Workflow Recognition
-  - [ ] PmLR50 Dataset
+  - [x] PmLR50 Dataset
   - [x] Pmnet
 
 - Blocking Effectiveness Detection
-  - [ ] PmLR50 Dataset (Bounding boxes)
+  - [x] PmLR50 Dataset (Bounding boxes)
 
 ## General Surgical Workflow Recognition
 ### Installation
@@ -30,7 +30,7 @@
 > conda env create -f PmNet.yml
 ```
 ### Prepare your data
-Download processed data from [PmLR50];
+Download processed data from [PmLR50][https://mycuhk-my.sharepoint.com/:u:/g/personal/1155229775_link_cuhk_edu_hk/Ebuiv08nzxRBlbgBRkgLMkwBWQ36z-XmzvO4RAAnykttUA?e=vIP4gg];
 The final structure of datasets should be as following:
 
 ```bash

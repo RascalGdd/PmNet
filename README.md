@@ -43,7 +43,15 @@ data/
                 └──...
             ├──...    
             └──50
-        └──labels_pkl/
+        └──phase_annotations/
+            └──train
+            ├──val
+            └──test
+        └──blocking_annotations/
+            └──train
+            ├──val
+            └──test
+        └──bbox_annotations/
             └──train
             ├──val
             └──test

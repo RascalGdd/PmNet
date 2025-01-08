@@ -1,5 +1,5 @@
 python run_phase_training.py \
---batch_size 4 \
+--batch_size 8 \
 --epochs 50 \
 --save_ckpt_freq 10 \
 --model timesformer \
@@ -20,6 +20,5 @@ python run_phase_training.py \
 --data_fps 1fps \
 --output_dir C:/DD\PmNet/results \
 --log_dir C:/DD/PmNet/results \
---num_workers 2 \
---no_auto_resume \
---dist_eval
+--num_workers 10 \
+--no_auto_resume

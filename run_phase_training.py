@@ -725,7 +725,7 @@ def main(args, ds_init):
 
     if args.eval:
         preds_file = os.path.join(args.output_dir, str(global_rank) + ".txt")
-        test_stats = final_phase_test(data_loader_val, model, device, preds_file)
+        test_stats = final_phase_test(data_loader_test, model, device, preds_file)
         print("Save Files: ", preds_file)
         torch.distributed.barrier()
         if global_rank == 0:

@@ -13,7 +13,7 @@ from sklearn import metrics
 
 def train_class_batch(model, samples, timestamps, target, criterion):
     outputs = model(samples, timestamps)
-    loss = criterion(outputs, target)
+    loss = criterion(outputs, target.long())
     return loss, outputs
 
 

@@ -30,7 +30,7 @@
 > conda env create -f PmNet.yml
 ```
 ### Prepare your data
-Download processed data from [PmLR50];
+Download processed data from [PmLR50(testset)](https://mycuhk-my.sharepoint.com/:u:/g/personal/1155229775_link_cuhk_edu_hk/ERLDpgFVWvhDp_mFxl5xnZkBy822enSjvkT_TTpyvKJLog?e=bNkMlS);
 The final structure of datasets should be as following:
 
 ```bash

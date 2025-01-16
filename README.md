@@ -1,7 +1,7 @@
 # [AAAI 2025] Surgical Workflow Recognition and Blocking Effectiveness Detection in Laparoscopic Liver Resections with Pringle Maneuver
 
 <div align=center>
-<img src="assets/Pipeline.png"  height=230 width=750>
+<img src="assets/Pipeline.png">
 </div>
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)

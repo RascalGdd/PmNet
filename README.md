@@ -13,12 +13,8 @@
 
 ## 🔥🔥🔥 News!!
 * Dec 12, 2024: 🤗 Our work has been accepted by AAAI 2025! Congratulations!
-* Dec 26, 2024: 🚀 Code for General Surgical Workflow Recognition has been released!
+* Feb 21, 2025: 🚀 Code and dataset have been released!
 
-## 📑 Open-source Plan
-
-- [x] PmLR50 Dataset
-- [x] Pmnet
 
 ## General Surgical Workflow Recognition
 ### Installation
@@ -29,7 +25,7 @@
 > conda env create -f PmNet.yml
 ```
 ### Prepare your data
-Download processed data from [PmLR50(testset)](https://mycuhk-my.sharepoint.com/:u:/g/personal/1155229775_link_cuhk_edu_hk/ERLDpgFVWvhDp_mFxl5xnZkBy822enSjvkT_TTpyvKJLog?e=bNkMlS);
+Download processed data from [PmLR50](https://docs.google.com/forms/d/e/1FAIpQLSf33G5mdwXeqwabfbXnEboMpj48iCNlQBAY_up4kLuZiqCPUQ/viewform?usp=dialog);
 The final structure of datasets should be as following:
 
 ```bash
@@ -37,23 +33,30 @@ data/
     └──PmLR50/
         └──frames/
             └──01
-                ├──00000.png
-                ├──00001.png
+                ├──00000000.jpg
+                ├──00000001.jpg
                 └──...
             ├──...    
             └──50
         └──phase_annotations/
-            └──train
-            ├──val
-            └──test
+            └──01.txt
+            ├──02.txt
+            ├──...
+            └──50.txt
         └──blocking_annotations/
-            └──train
-            ├──val
-            └──test
+            └──01.txt
+            ├──02.txt
+            ├──...
+            └──50.txt
         └──bbox_annotations/
+            └──01.json
+            ├──02.json
+            ├──...
+            └──50.json
+        └──labels/
             └──train
-            ├──val
-            └──test
+            ├──test
+            └──infer
 ```
 ### Training
 We provide the script for training [train_phase.sh](https://github.com/RascalGdd/PmNet/blob/main/train.sh).

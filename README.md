@@ -22,7 +22,10 @@
 * Device: Two NVIDIA GeForce RTX 4090s
 * Create a virtual environment
 ```shell
-> conda env create -f PmNet.yml
+git clone https://github.com/RascalGdd/PmNet.git
+cd PmNet
+conda env create -f PmNet.yml
+conda activate PmNet
 ```
 ### Prepare your data
 Download processed data from [PmLR50](https://docs.google.com/forms/d/e/1FAIpQLSf33G5mdwXeqwabfbXnEboMpj48iCNlQBAY_up4kLuZiqCPUQ/viewform?usp=dialog);

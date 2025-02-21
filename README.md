@@ -95,7 +95,7 @@ We list some more useful configurations for easy usage:
 
 ### Checkpoint
 
-The checkpoint of our model is provided [here](https://mycuhk-my.sharepoint.com/:u:/g/personal/1155229775_link_cuhk_edu_hk/EaymSNkgnLJJry1PqwINcVUBQzBYPt53fE9c574Z08TWSg?e=4IWBKO).
+The checkpoint of our model is provided [here](https://mycuhk-my.sharepoint.com/:u:/g/personal/1155229775_link_cuhk_edu_hk/EZVHcTmQBY1Mv1zTSLEtu0cBKTA7zTNURaG65gWWloqFmg?e=Zudo2X).
 
 ## Acknowledgements
 Huge thanks to the authors of following open-source projects:

@@ -17,12 +17,8 @@
 
 ## 📑 Open-source Plan
 
-- General Surgical Workflow Recognition
-  - [x] PmLR50 Dataset
-  - [x] Pmnet
-
-- Blocking Effectiveness Detection
-  - [x] PmLR50 Dataset (Bounding boxes)
+- [x] PmLR50 Dataset
+- [x] Pmnet
 
 ## General Surgical Workflow Recognition
 ### Installation

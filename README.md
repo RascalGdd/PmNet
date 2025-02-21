@@ -64,17 +64,20 @@ run the following code for training
 ```shell
 sh train.sh
 ```
-and run the following code for testing (input your checkpoint_path in --finetune)
+and run the following code for testing
 
 ```shell
 sh test.sh
 ```
+The checkpoint of our model is provided [here](https://mycuhk-my.sharepoint.com/:u:/g/personal/1155229775_link_cuhk_edu_hk/EZVHcTmQBY1Mv1zTSLEtu0cBKTA7zTNURaG65gWWloqFmg?e=Zudo2X).
+
 ### More Configurations
 
 We list some more useful configurations for easy usage:
 
 |        Argument        |  Default  |                Description                |
 |:----------------------:|:---------:|:-----------------------------------------:|
+|  `--nproc_per_node`   |  2  |    Number of nodes used for training and testing    |
 |       `--batch_size`       |   8    |   The batch size for training and inference   |
 |     `--epochs`     | 50  |      The max epoch for training      |
 |    `--save_ckpt_freq`    |    10    |     The frequency for saving checkpoints during training     |
@@ -83,11 +86,8 @@ We list some more useful configurations for easy usage:
 |     `--num_frames`     |    20    | The number of consecutive frames used  |
 |     `--sampling_rate`   |    8  | The sampling interval for comsecutive frames |
 |        `--enable_deepspeed`        |    True  |   Use deepspeed to accelerate  |
-|  `--dist_eval`   |   True   |    Use distributed evaluation to accelerate    |
-
-### Checkpoint
-
-The checkpoint of our model is provided [here](https://mycuhk-my.sharepoint.com/:u:/g/personal/1155229775_link_cuhk_edu_hk/EZVHcTmQBY1Mv1zTSLEtu0cBKTA7zTNURaG65gWWloqFmg?e=Zudo2X).
+|  `--dist_eval`   |   False   |    Use distributed evaluation to accelerate    |
+|  `--load_ckpt`   |   --   |    Load a given checkpoint for testing    |
 
 ## Acknowledgements
 Huge thanks to the authors of following open-source projects:

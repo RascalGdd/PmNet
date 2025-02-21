@@ -19,7 +19,7 @@
 ## PmLR50 Dataset and PmNet
 ### Installation
 * Environment: CUDA 12.5 / Python 3.8
-* Device: Two NVIDIA GeForce RTX 4090s
+* Device: Two NVIDIA GeForce RTX 4090 GPUs
 * Create a virtual environment
 ```shell
 git clone https://github.com/RascalGdd/PmNet.git

@@ -18,7 +18,7 @@
 
 ## PmLR50 Dataset and PmNet
 ### Installation
-* Environment: CUDA 11.4 / Python 3.8
+* Environment: CUDA 12.5 / Python 3.8
 * Device: Two NVIDIA GeForce RTX 4090s
 * Create a virtual environment
 ```shell

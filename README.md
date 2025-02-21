@@ -60,7 +60,7 @@ data/
             └──test
 ```
 ### Training
-We provide the script for training [train_phase.sh](https://github.com/RascalGdd/PmNet/blob/main/train_phase.sh).
+We provide the script for training [train_phase.sh](https://github.com/RascalGdd/PmNet/blob/main/train.sh).
 
 run the following code for training
 

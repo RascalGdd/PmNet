@@ -16,7 +16,7 @@
 * Feb 21, 2025: 🚀 Code and dataset have been released!
 
 
-## General Surgical Workflow Recognition
+## PmLR50 Dataset and PmNet
 ### Installation
 * Environment: CUDA 11.4 / Python 3.8
 * Device: Two NVIDIA GeForce RTX 4090s

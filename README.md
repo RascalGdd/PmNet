@@ -53,28 +53,21 @@ data/
             ├──02.json
             ├──...
             └──50.json
-        └──labels/
-            └──train
-            ├──test
-            └──infer
 ```
+Then, process the data with [generate_labels_pmlr.py]([https://github.com/RascalGdd/PmNet/blob/main/train.sh](https://github.com/RascalGdd/PmNet/blob/main/datasets/data_preprosses/generate_labels_pmlr.py)) to generate labels for training and testing.
+
 ### Training
-We provide the script for training [train_phase.sh](https://github.com/RascalGdd/PmNet/blob/main/train.sh).
+We provide the script for training [train.sh](https://github.com/RascalGdd/PmNet/blob/main/train.sh) and testing [test.sh](https://github.com/RascalGdd/PmNet/blob/main/test.sh).
 
 run the following code for training
 
 ```shell
-sh scripts/train_phase.sh
+sh train.sh
 ```
-> You need to modify **data_path**, **eval_data_path**, **output_dir** and **log_dir** according to your own setting.
-
-### Test
-> Currently, the test and evaluation codes we provide are only applicable to two-GPU inference.
-
-1. run the following code for testing, and get **0.txt** and **1.txt**;
+and run the following code for testing (input your checkpoint_path in --finetune)
 
 ```shell
-sh scripts/test.sh
+sh test.sh
 ```
 ### More Configurations
 

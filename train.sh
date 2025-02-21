@@ -1,0 +1,24 @@
+python -m torch.distributed.launch \
+--nproc_per_node=2 \
+run_phase_training.py \
+--batch_size 8 \
+--epochs 30 \
+--save_ckpt_freq 10 \
+--model pmnet \
+--lr 3e-5 \
+--layer_decay 0.75 \
+--warmup_epochs 5 \
+--data_path data_path \
+--eval_data_path data_path \
+--nb_classes 5 \
+--data_strategy online \
+--output_mode key_frame \
+--num_frames 20 \
+--sampling_rate 8 \
+--data_set PmLR50 \
+--data_fps 1fps \
+--output_dir output_path \
+--log_dir output_path \
+--num_workers 10 \
+--enable_deepspeed \
+--no_auto_resume

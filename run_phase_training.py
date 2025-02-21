@@ -6,11 +6,7 @@ import torch
 import torch.backends.cudnn as cudnn
 import json
 import os
-import cv2
-from functools import partial
 from pathlib import Path
-from collections import OrderedDict
-import torch.nn.functional as F
 import sys
 
 sys.path.append("D:\DD\PmNet")
@@ -18,7 +14,6 @@ sys.path.append("D:\DD\PmNet")
 from datasets.transforms.mixup import Mixup
 from timm.models import create_model
 from timm.loss import LabelSmoothingCrossEntropy, SoftTargetCrossEntropy
-from timm.utils import ModelEma
 from datasets.transforms.optim_factory import (
     create_optimizer,
     get_parameter_groups,
@@ -33,10 +28,8 @@ from downstream_phase.engine_for_phase import (
     merge,
 )
 from utils import NativeScalerWithGradNormCount as NativeScaler
-from utils import multiple_samples_collate
 import utils
-
-from model.timesformer import timesformer
+from model.pmnet import pmnet
 
 def get_args():
     parser = argparse.ArgumentParser(
@@ -316,7 +309,7 @@ def get_args():
     )  # 0表示指数级间隔，-1表示随机间隔设置, -2表示递增间隔
     parser.add_argument(
         "--data_set",
-        default="LungSeg",
+        default="PmLR50",
         type=str,
         help="dataset",
     )
@@ -528,7 +521,7 @@ def main(args, ds_init):
     data_loader_val = torch.utils.data.DataLoader(
         dataset_val,
         sampler=sampler_val,
-        batch_size=int(2 * args.batch_size),
+        batch_size=int(args.batch_size),
         num_workers=args.num_workers,
         pin_memory=args.pin_mem,
         drop_last=False,
@@ -537,7 +530,7 @@ def main(args, ds_init):
     data_loader_test = torch.utils.data.DataLoader(
         dataset_test,
         sampler=sampler_test,
-        batch_size=int(2 * args.batch_size),
+        batch_size=int(args.batch_size),
         num_workers=args.num_workers,
         pin_memory=args.pin_mem,
         drop_last=False,
@@ -546,6 +539,7 @@ def main(args, ds_init):
     # 训练Trick，有效显著的数据增强效果，参见：https://blog.csdn.net/sophicchen/article/details/120432083
     mixup_fn = None
     mixup_active = args.mixup > 0 or args.cutmix > 0.0 or args.cutmix_minmax is not None
+    mixup_active = False
     if mixup_active:
         print("Mixup is activated!")
         mixup_fn = Mixup(
@@ -728,18 +722,6 @@ def main(args, ds_init):
         test_stats = final_phase_test(data_loader_test, model, device, preds_file)
         print("Save Files: ", preds_file)
         torch.distributed.barrier()
-        if global_rank == 0:
-            print("Start merging results...")
-            final_top1, final_top5 = merge(args.output_dir, num_tasks)
-            print(
-                f"Accuracy of the network on the {len(dataset_test)} test videos: Top-1: {final_top1:.2f}%, Top-5: {final_top5:.2f}%"
-            )
-            log_stats = {"Final top-1": final_top1, "Final Top-5": final_top5}
-            if args.output_dir and utils.is_main_process():
-                with open(
-                    os.path.join(args.output_dir, "log.txt"), mode="a", encoding="utf-8"
-                ) as f:
-                    f.write(json.dumps(log_stats) + "\n")
         exit(0)
 
     print(f"Start training for {args.epochs} epochs")
@@ -855,22 +837,11 @@ def main(args, ds_init):
     state_dict = model.state_dict()
     for k in ["head.weight", "head.bias"]:
         if (
-            k in checkpoint_model
-            and checkpoint_model[k].shape != state_dict[k].shape
+                k in checkpoint_model
+                and checkpoint_model[k].shape != state_dict[k].shape
         ):
             print(f"Removing key {k} from pretrained checkpoint")
             del checkpoint_model[k]
-
-    all_keys = list(checkpoint_model.keys())
-    new_dict = OrderedDict()
-    for key in all_keys:
-        if key.startswith("backbone."):
-            new_dict[key[9:]] = checkpoint_model[key]
-        elif key.startswith("encoder."):
-            new_dict[key[8:]] = checkpoint_model[key]
-        else:
-            new_dict[key] = checkpoint_model[key]
-    checkpoint_model = new_dict
     utils.load_state_dict(model, checkpoint_model, prefix=args.model_prefix)
 
     model.to(device)
@@ -880,18 +851,18 @@ def main(args, ds_init):
 
     test_stats = final_phase_test(data_loader_test, model, device, preds_file)
     torch.distributed.barrier()
-    if global_rank == 0:
-        print("Start merging results...")
-        final_top1, final_top5 = merge(args.output_dir, num_tasks)
-        print(
-            f"Accuracy of the network on the {len(dataset_test)} test videos: Top-1: {final_top1:.2f}%, Top-5: {final_top5:.2f}%"
-        )
-        log_stats = {"Final top-1": final_top1, "Final Top-5": final_top5}
-        if args.output_dir and utils.is_main_process():
-            with open(
-                os.path.join(args.output_dir, "log.txt"), mode="a", encoding="utf-8"
-            ) as f:
-                f.write(json.dumps(log_stats) + "\n")
+    # if global_rank == 0:
+    #     print("Start merging results...")
+    #     final_top1, final_top5 = merge(args.output_dir, num_tasks)
+    #     print(
+    #         f"Accuracy of the network on the {len(dataset_test)} test videos: Top-1: {final_top1:.2f}%, Top-5: {final_top5:.2f}%"
+    #     )
+    #     log_stats = {"Final top-1": final_top1, "Final Top-5": final_top5}
+    #     if args.output_dir and utils.is_main_process():
+    #         with open(
+    #             os.path.join(args.output_dir, "log.txt"), mode="a", encoding="utf-8"
+    #         ) as f:
+    #             f.write(json.dumps(log_stats) + "\n")
 
     total_time = time.time() - start_time
     total_time_str = str(datetime.timedelta(seconds=int(total_time)))

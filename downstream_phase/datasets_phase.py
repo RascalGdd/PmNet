@@ -4,7 +4,7 @@ from datasets.transforms.surg_transforms import *
 
 from datasets.phase.Cholec80_phase import PhaseDataset_Cholec80
 from datasets.phase.AutoLaparo_phase import PhaseDataset_AutoLaparo
-from datasets.phase.LungSeg_phase import PhaseDataset_LungSeg
+from datasets.phase.PmLR50_phase import PhaseDataset_PmLR50
 
 def build_dataset(is_train, test_mode, fps, args):
     """Load video phase recognition dataset."""
@@ -79,7 +79,7 @@ def build_dataset(is_train, test_mode, fps, args):
         )
         nb_classes = 7
 
-    elif args.data_set == "LungSeg":
+    elif args.data_set == "PmLR50":
         mode = None
         anno_path = None
         if is_train is True:
@@ -96,7 +96,7 @@ def build_dataset(is_train, test_mode, fps, args):
             mode = "val"
             anno_path = os.path.join(args.data_path, "labels", "test", fps + "test.pickle")
 
-        dataset = PhaseDataset_LungSeg(
+        dataset = PhaseDataset_PmLR50(
             anno_path=anno_path,
             data_path=args.data_path,
             mode=mode,

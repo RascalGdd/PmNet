@@ -11,9 +11,53 @@ from datetime import datetime
 from scipy.special import softmax
 from sklearn import metrics
 
-def train_class_batch(model, samples, timestamps, target, criterion):
-    outputs = model(samples, timestamps)
-    loss = criterion(outputs, target.long())
+def train_class_batch(model, samples, timestamps, bboxes, target, target_blocking, criterion):
+    outputs, outputs_blocking, contrastive_dict = model(samples, timestamps, bboxes, target)
+    loss = criterion(outputs, target)
+    loss_blocking = criterion(outputs_blocking, target_blocking)
+    loss += loss_blocking
+
+    if 'knot_FP_feats' in contrastive_dict.keys():
+
+        f_k_double_prime = contrastive_dict['knot_FP_feats']   # f_k''
+        p_y = model.release_feats.detach()  # 正确类别原型特征
+        p_yj = model.knot_feats.detach() # 错误类别原型特征
+
+        # 计算欧几里得距离的平方
+        distance_correct = torch.norm(f_k_double_prime - p_y, dim=1) ** 2 # (B,)
+        distance_incorrect = torch.norm(f_k_double_prime - p_yj, dim=1)  # (B,)
+
+        # 计算第二项中的 max(0, 1 - distance_incorrect)
+        constraint = torch.clamp(1 - distance_incorrect, min=0) ** 2 # (B,)
+
+        # 最终损失 (批量内每个样本的损失)
+        L_CL = 0.5 * distance_correct + 0.5 * constraint  # (B,)
+
+        # 对 batch 取平均
+        L_CL_mean = L_CL.mean()
+        loss += 0.1 * L_CL_mean
+
+
+
+    if 'release_FP_feats' in contrastive_dict.keys():
+        f_k_double_prime = contrastive_dict['release_FP_feats']  # f_k''
+        p_y = model.knot_feats.detach()  # 正确类别原型特征
+        p_yj = model.release_feats.detach()  # 错误类别原型特征
+
+        # 计算欧几里得距离的平方
+        distance_correct = torch.norm(f_k_double_prime - p_y, dim=1) ** 2  # (B,)
+        distance_incorrect = torch.norm(f_k_double_prime - p_yj, dim=1)  # (B,)
+
+        # 计算第二项中的 max(0, 1 - distance_incorrect)
+        constraint = torch.clamp(1 - distance_incorrect, min=0) ** 2  # (B,)
+
+        # 最终损失 (批量内每个样本的损失)
+        L_CL = 0.5 * distance_correct + 0.5 * constraint  # (B,)
+
+        # 对 batch 取平均
+        L_CL_mean = L_CL.mean()
+        loss += 0.1 * L_CL_mean
+
     return loss, outputs
 
 
@@ -57,7 +101,7 @@ def train_one_epoch(
     else:
         optimizer.zero_grad()
 
-    for data_iter_step, (samples, targets, _, timestamps_ratio) in enumerate(
+    for data_iter_step, (samples, targets, blocking_targets, bboxes, _, timestamps_ratio) in enumerate(
             metric_logger.log_every(data_loader, print_freq, header)
     ):
         step = data_iter_step // update_freq
@@ -78,7 +122,9 @@ def train_one_epoch(
 
         samples = samples.to(device, non_blocking=True)
         targets = targets.to(device, non_blocking=True)
+        blocking_targets = blocking_targets.to(device, non_blocking=True)
         timestamps_ratio = timestamps_ratio.to(device, non_blocking=True).to(torch.float16)
+        bboxes = bboxes.to(device, non_blocking=True)
         # timestamps = torch.tensor([float(k.split('_')[-1]) for k in timestamps]).to(device, non_blocking=True).to(
         #     torch.float16)
 
@@ -87,10 +133,10 @@ def train_one_epoch(
 
         if loss_scaler is None:
             samples = samples.half()
-            loss, output = train_class_batch(model, samples, timestamps_ratio, targets, criterion)
+            loss, output = train_class_batch(model, samples, timestamps_ratio, bboxes, targets, blocking_targets, criterion)
         else:
             with torch.cuda.amp.autocast():
-                loss, output = train_class_batch(model, samples, timestamps_ratio, targets, criterion)
+                loss, output = train_class_batch(model, samples, timestamps_ratio, bboxes, targets, blocking_targets, criterion)
 
         loss_value = loss.item()
 
@@ -184,31 +230,45 @@ def validation_one_epoch(data_loader, model, device):
     for batch in metric_logger.log_every(data_loader, 10, header):
         videos = batch[0]
         target = batch[1]
-        ids = batch[2]
-        timestamps_ratio = batch[3]
+        blocking_target = batch[2]
+        bboxes = batch[3]
+        ids = batch[4]
+        timestamps_ratio = batch[5]
 
         videos = videos.to(device, non_blocking=True)
         target = target.to(device, non_blocking=True)
+        blocking_target = blocking_target.to(device, non_blocking=True)
+        bboxes = bboxes.to(device, non_blocking=True)
         timestamps_ratio = timestamps_ratio.to(device, non_blocking=True).to(torch.float16)
         # timestamps = torch.tensor([float(k.split('_')[-1]) for k in ids]).to(device, non_blocking=True).to(
         #     torch.float16)
 
         # compute output
         with torch.cuda.amp.autocast():
-            output = model(videos, timestamps_ratio)
+            output, blocking_output, contrastive_dict = model(videos, timestamps_ratio, bboxes)
             loss = criterion(output, target)
 
+        # 对 batch 取平均
         acc1, acc5 = accuracy(output, target, topk=(1, 5))
+        acc1_blocking = accuracy(blocking_output, blocking_target, topk=(1,))[0]
 
         batch_size = videos.shape[0]
         metric_logger.update(loss=loss.item())
         metric_logger.meters["acc1"].update(acc1.item(), n=batch_size)
         metric_logger.meters["acc5"].update(acc5.item(), n=batch_size)
+        metric_logger.meters["blocking_acc1"].update(acc1_blocking.item(), n=batch_size)
     # gather the stats from all processes
     metric_logger.synchronize_between_processes()
+    print("For Phase Prediction:")
     print(
         "* Acc@1 {top1.global_avg:.3f} Acc@5 {top5.global_avg:.3f} loss {losses.global_avg:.3f}".format(
             top1=metric_logger.acc1, top5=metric_logger.acc5, losses=metric_logger.loss
+        )
+    )
+    print("For Blocking Prediction:")
+    print(
+        "* Acc@1 {top1.global_avg:.3f}".format(
+            top1=metric_logger.blocking_acc1
         )
     )
 
@@ -228,25 +288,31 @@ def final_phase_test(data_loader, model, device, file):
 
     gt_list = []
     pred_list = []
+    gt_list_blocking = []
+    pred_list_blocking = []
 
+    effective_dict = {}
     for batch in metric_logger.log_every(data_loader, 10, header):
         videos = batch[0]
         target = batch[1]
-        ids = batch[2]
-        timestamps_ratio = batch[3]
+        blocking_target = batch[2]
+        bboxes = batch[3]
+        ids = batch[4]
+        timestamps_ratio = batch[5]
         videos = videos.to(device, non_blocking=True)
         target = target.to(device, non_blocking=True)
+        bboxes = bboxes.to(device, non_blocking=True)
+        blocking_target = blocking_target.to(device, non_blocking=True)
         timestamps_ratio = timestamps_ratio.to(device, non_blocking=True).to(torch.float)
         # timestamps = torch.tensor([float(k.split('_')[-1]) for k in ids]).to(device, non_blocking=True).to(
         #     torch.float16)
 
         # compute output
         with torch.cuda.amp.autocast():
-            output = model(videos, timestamps_ratio)
-            # Output: N,7
-            # Target: N,
+            output, output_blocking, contrastive_dict = model(videos, timestamps_ratio, bboxes, target)
             loss = criterion(output, target.to(torch.long))
 
+        output_blocking.data[:, 1] += 2.45
         for i in range(output.size(0)):
             from collections import Counter
             count = Counter(ids[i])
@@ -272,20 +338,36 @@ def final_phase_test(data_loader, model, device, file):
             # )
             string = "{} {} {}\n".format(
                 unique_id,
-                str(torch.argmax(output.data[i], dim=0).cpu().numpy().tolist()),
-                str(int(target[i].cpu().numpy())),
+                str(torch.argmax(output_blocking.data[i], dim=0).cpu().numpy().tolist()),
+                str(int(blocking_target[i].cpu().numpy())),
             )
 
             final_result.append(string)
             gt_list.append(int(target[i].cpu().numpy()))
             pred_list.append(int(torch.argmax(output.data[i], dim=0).cpu().numpy()))
+            if pred_list[-1] != 1:
+                pred_list_blocking.append(0)
+            else:
+                if video_id not in effective_dict.keys():
+                    effective_dict[video_id] = 0
+                if effective_dict[video_id] >= 2:
+                    pred_list_blocking.append(1)
+                    effective_dict[video_id] += 1
+                else:
+                    pred_list_blocking.append(int(torch.argmax(output_blocking.data[i], dim=0).cpu().numpy()))
+                    if pred_list_blocking[-1] == 1:
+                        effective_dict[video_id] += 1
+            # print(effective_dict)
+            gt_list_blocking.append(int(blocking_target[i].cpu().numpy()))
 
         acc1, acc5 = accuracy(output, target, topk=(1, 5))
+        acc1_blocking = accuracy(output_blocking, blocking_target, topk=(1,))[0]
 
         batch_size = videos.shape[0]
         metric_logger.update(loss=loss.item())
         metric_logger.meters["acc1"].update(acc1.item(), n=batch_size)
         metric_logger.meters["acc5"].update(acc5.item(), n=batch_size)
+        metric_logger.meters["blocking_acc1"].update(acc1_blocking.item(), n=batch_size)
 
     val_recall_phase = metrics.recall_score(gt_list, pred_list, average='macro')
     val_precision_phase = metrics.precision_score(gt_list, pred_list, average='macro')
@@ -293,6 +375,12 @@ def final_phase_test(data_loader, model, device, file):
     val_precision_each_phase = metrics.precision_score(gt_list, pred_list, average=None)
     val_recall_each_phase = metrics.recall_score(gt_list, pred_list, average=None)
 
+    val_recall_blocking = metrics.recall_score(gt_list_blocking, pred_list_blocking, average='binary', pos_label=1)
+    val_precision_blocking = metrics.precision_score(gt_list_blocking, pred_list_blocking, average='binary', pos_label=1)
+    val_jaccard_blocking = metrics.jaccard_score(gt_list_blocking, pred_list_blocking, average='binary', pos_label=1)
+    val_accuracy_blocking = metrics.accuracy_score(gt_list_blocking, pred_list_blocking)
+
+    print('For Phase Prediction:')
     print("val_precision_each_phase:", val_precision_each_phase)
     print("val_recall_each_phase:", val_recall_each_phase)
     print("val_precision_phase", val_precision_phase)
@@ -313,6 +401,17 @@ def final_phase_test(data_loader, model, device, file):
             top1=metric_logger.acc1, top5=metric_logger.acc5, losses=metric_logger.loss
         )
     )
+
+    print('For Blocking Prediction:')
+    print("val_precision_blocking", val_precision_blocking)
+    print("val_recall_blocking", val_recall_blocking)
+    print("val_jaccard_blocking", val_jaccard_blocking)
+    print("* Acc@1", str(val_accuracy_blocking*100)[:6])
+    # print(
+    #     "* Acc@1 {top1.global_avg:.3f}".format(
+    #         top1=metric_logger.blocking_acc1
+    #     )
+    # )
 
     return {k: meter.global_avg for k, meter in metric_logger.meters.items()}
 

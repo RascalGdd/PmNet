@@ -578,7 +578,7 @@ class MambaBlock_CSM(nn.Module):
 
         xz = self.in_proj(x)  # (B, L, 2*ED)
         x, z = xz.chunk(2, dim=-1)  #  (B, L, ED), (B, L, ED)
-        q = self.in_proj_q(q)
+        q = self.in_proj_q(q.to(torch.float16))
 
         #  x branch
         x = x.transpose(1, 2)  #  (B, ED, L)
@@ -603,7 +603,7 @@ class MambaBlock_CSM(nn.Module):
         z = F.silu(z)
 
         output = y * z + q * z
-        output = self.out_proj(output)  #  (B, L, D)
+        output = self.out_proj(output.to(torch.float16))  #  (B, L, D)
 
         return output
 

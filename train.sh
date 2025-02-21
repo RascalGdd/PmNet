@@ -2,7 +2,7 @@ python -m torch.distributed.launch \
 --nproc_per_node=2 \
 run_phase_training.py \
 --batch_size 8 \
---epochs 30 \
+--epochs 50 \
 --save_ckpt_freq 10 \
 --model pmnet \
 --lr 3e-5 \

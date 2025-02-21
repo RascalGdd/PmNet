@@ -272,7 +272,7 @@ def get_args():
     )
 
     # Finetuning params
-    parser.add_argument("--finetune", default="", help="finetune from checkpoint")
+    parser.add_argument("--load_ckpt", default="", help="load checkpoint")
     parser.add_argument("--model_key", default="model|module", type=str)
     parser.add_argument("--model_prefix", default="", type=str)
 
@@ -572,15 +572,15 @@ def main(args, ds_init):
 
     # 加载预训练参数，并且根据策略调整Patch_embedding，可直接加载基于VideoMAE预训练参数
     # 也可以加载官方的VIT的预训练参数
-    if args.finetune:
-        if args.finetune.startswith("https"):
+    if args.load_ckpt:
+        if args.load_ckpt.startswith("https"):
             checkpoint = torch.hub.load_state_dict_from_url(
-                args.finetune, map_location="cpu", check_hash=True
+                args.load_ckpt, map_location="cpu", check_hash=True
             )
         else:
-            checkpoint = torch.load(args.finetune, map_location="cpu")
+            checkpoint = torch.load(args.load_ckpt, map_location="cpu")
 
-        print("Load ckpt from %s" % args.finetune)
+        print("Load ckpt from %s" % args.load_ckpt)
         checkpoint_model = None
         for model_key in args.model_key.split("|"):
             if model_key in checkpoint:

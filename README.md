@@ -54,7 +54,7 @@ data/
             ├──...
             └──50.json
 ```
-Then, process the data with [generate_labels_pmlr.py]([https://github.com/RascalGdd/PmNet/blob/main/train.sh](https://github.com/RascalGdd/PmNet/blob/main/datasets/data_preprosses/generate_labels_pmlr.py)) to generate labels for training and testing.
+Then, process the data with [generate_labels_pmlr.py](https://github.com/RascalGdd/PmNet/blob/main/datasets/data_preprosses/generate_labels_pmlr.py) to generate labels for training and testing.
 
 ### Training
 We provide the script for training [train.sh](https://github.com/RascalGdd/PmNet/blob/main/train.sh) and testing [test.sh](https://github.com/RascalGdd/PmNet/blob/main/test.sh).

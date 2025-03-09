@@ -25,7 +25,7 @@
 git clone https://github.com/RascalGdd/PmNet.git
 cd PmNet
 conda env create -f PmNet.yml
-conda activate PmNet
+conda activate Pmnet
 ```
 ### Prepare your data
 Download processed data from [PmLR50](https://docs.google.com/forms/d/e/1FAIpQLSf33G5mdwXeqwabfbXnEboMpj48iCNlQBAY_up4kLuZiqCPUQ/viewform?usp=dialog);

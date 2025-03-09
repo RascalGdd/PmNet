@@ -24,7 +24,7 @@ def train_class_batch(model, samples, timestamps, bboxes, target, target_blockin
         p_yj = model.knot_feats.detach() # 错误类别原型特征
 
         # 计算欧几里得距离的平方
-        distance_correct = torch.norm(f_k_double_prime - p_y, dim=1) ** 2 # (B,)
+        distance_correct = torch.norm(f_k_double_prime - p_y, dim=1) ** 0.5 # (B,)
         distance_incorrect = torch.norm(f_k_double_prime - p_yj, dim=1)  # (B,)
 
         # 计算第二项中的 max(0, 1 - distance_incorrect)
@@ -45,7 +45,7 @@ def train_class_batch(model, samples, timestamps, bboxes, target, target_blockin
         p_yj = model.release_feats.detach()  # 错误类别原型特征
 
         # 计算欧几里得距离的平方
-        distance_correct = torch.norm(f_k_double_prime - p_y, dim=1) ** 2  # (B,)
+        distance_correct = torch.norm(f_k_double_prime - p_y, dim=1) ** 0.5  # (B,)
         distance_incorrect = torch.norm(f_k_double_prime - p_yj, dim=1)  # (B,)
 
         # 计算第二项中的 max(0, 1 - distance_incorrect)

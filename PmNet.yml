@@ -79,7 +79,6 @@ dependencies:
   - python=3.8.18=h7a1cb2a_0
   - python-libarchive-c=2.9=pyhd3eb1b0_1
   - python_abi=3.8=2_cp38
-  - pytorch=1.8.0=py3.8_cuda11.1_cudnn8.0.5_0
   - pytz=2022.7=py38h06a4308_0
   - pyyaml=6.0=py38h5eee18b_1
   - readline=8.2=h5eee18b_0
@@ -93,8 +92,6 @@ dependencies:
   - tk=8.6.12=h1ccaba5_0
   - tomli=2.0.1=py38h06a4308_0
   - toolz=0.12.0=py38h06a4308_0
-  - torchaudio=0.8.0=py38
-  - torchvision=0.9.0=py38_cu111
   - tqdm=4.65.0=py38hb070fc8_0
   - urllib3=1.26.16=py38h06a4308_0
   - wheel=0.38.4=py38h06a4308_0
@@ -111,7 +108,6 @@ dependencies:
       - contourpy==1.1.1
       - cycler==0.11.0
       - decord==0.6.0
-      - deepspeed==0.5.8
       - defusedxml==0.7.1
       - docker-pycreds==0.4.0
       - einops==0.6.1
@@ -175,17 +171,13 @@ dependencies:
       - tensorboard==2.13.0
       - tensorboard-data-server==0.7.1
       - tensorboardx==2.6.2.2
-      - tensorflow==2.13.1
-      - tensorflow-estimator==2.13.0
-      - tensorflow-io-gcs-filesystem==0.34.0
-      - termcolor==2.3.0
       - threadpoolctl==3.2.0
       - tifffile==2023.7.10
       - timm==0.4.12
       - tokenizers==0.14.1
       - transformers==4.16.2
       - triton==2.1.0
-      - typing-extensions==4.5.0
+      - typing-extensions==4.6.1
       - tzdata==2023.3
       - ujson==5.8.0
       - wandb==0.16.0
@@ -193,3 +185,4 @@ dependencies:
       - werkzeug==3.0.0
       - wrapt==1.16.0
       - zipp==3.16.2
+      - deepspeed==0.16.4

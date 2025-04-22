@@ -98,5 +98,15 @@ Huge thanks to the authors of following open-source projects:
 - [Surgformer](https://github.com/isyangshu/Surgformer/)
 - [TimeSformer](https://github.com/facebookresearch/TimeSformer)
 
-## License & Citation 
-If you find our work useful in your research, please consider citing our paper.
+## Citation 
+If you find our work useful in your research, please consider citing our paper:
+
+        @inproceedings{guo2025surgical,
+          title={Surgical Workflow Recognition and Blocking Effectiveness Detection in Laparoscopic Liver Resection with Pringle Maneuver},
+          author={Guo, Diandian and Si, Weixin and Li, Zhixi and Pei, Jialun and Heng, Pheng-Ann},
+          booktitle={Proceedings of the AAAI Conference on Artificial Intelligence},
+          volume={39},
+          number={3},
+          pages={3220--3228},
+          year={2025}
+        }
